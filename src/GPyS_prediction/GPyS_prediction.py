@@ -1,7 +1,6 @@
 import numpy as np
 import scipy
 import scipy.linalg as la
-#from GPyS_typings import Float_1D_Array, Float_2D_Array_type
 
 from GPyS_preprocessor import Preprocessor
 
@@ -32,14 +31,11 @@ class Prediction(object):
         K = Prediction.construct_corr_matrix0(sample, length_scale)
         cv = Prediction.construct_corr_vector0(sample, target, length_scale)
         l, k = Prediction.__get_dimensions(K, XtX)
-        t = t  # or k
+        t = t  
         v, diag_v = Prediction.__compute_v_and_diag_vinv(K, cv)
-        # tr = None  # Would be updated in the program #check and delete
         khat, k_tilda = Prediction.__compute_khat_and_k_tilda(K, diag_v)
         XPX = Prediction.__compute_XPX(l, k, k_tilda, XtX)
-        # U = Prediction.__XPX_decomposition(XPX)
         eps2 = Prediction.__compute_noise_variance(v, cv)
-        # eps2_1 = Prediction.__compute_noise_variance2(v, cv)
         CPC = Prediction.__compute_CPC(X, XPX)
         d1_squared, v_circ = Prediction.__compute_EVD(t, CPC)
         # GPS_Prediction_0 = {"Vcirc": v_circ, "sigma^2": d1_squared, "eps^2": eps2}
@@ -64,7 +60,7 @@ class Prediction(object):
             theta_scaled = scale1 @ X1
             theta_prime_scaled = scale2 @ X2
         else:
-            scale = np.diag(1 / beta)  # cross check the direct application of the non-isotropic scale
+            scale = np.diag(1 / beta)  
             theta_scaled = scale @ X1
             theta_prime_scaled = scale @ X2
         dist = scipy.spatial.distance_matrix(theta_scaled, theta_prime_scaled)
