@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "GPySR"
+version = "0.0.2"
+authors = [
+  { name="Taiwo Adebiyi", email="taadebi2@cougarnet.uh.edu" },
+]
+description = "Gaussian Process Subspace Regression Prediction, Eigen-Decomposition Version"
+readme = "README.md"
+requires-python = ">=3.6"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: OS Independent",
+]
+
+#[project.urls]
+#"Homepage" = "-----------"
+#"Bug Tracker" = "-------"
+
