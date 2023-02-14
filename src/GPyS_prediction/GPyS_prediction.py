@@ -417,8 +417,3 @@ if __name__ == "__main__":
     # # Test compute_EVD()
     d1_squared, v_circ = Prediction.compute_EVD(X, sample, target, length_scale, t=None)
     print("compute_EVD: \n", d1_squared, v_circ)
-
-# ---------------------------------------------------------------------------------
-# Clarifications for Sir John
-# why was he checking through other code before converting any function to static method?
-# I guess those private functions will be called in the init function whose input arguments have been previously defined?....
