@@ -41,8 +41,7 @@ class GPyS_Script:
 		
 		return ret
 
-# see sample input below:(also refer to GPys_anemometer_solve for robust 
-#example on big data)
+# see sample input below:(also refer to example_G12 for an iterative use of the principal function) 
 
 if __name__ == "__main__":
 	
