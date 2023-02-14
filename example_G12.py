@@ -22,14 +22,6 @@ class G12(object):
         self.c = c
         self.n_new = n_new
 
-        # self.set_pdf()
-        # self.alpha_pred_radius()
-        # self.set_sample()
-        # self.set_test_points()
-        # self.set_basis()
-        # self.set_length_scale()
-        #self.pred = Prediction(X = self.X, sample = self.theta, target = self.thetanew, length_scale = self.len, t=None)
-
     def set_pdf(self):
         self.DTpdf = pd.DataFrame(np.linspace(-math.pi/2, math.pi/2, self.n), columns=["a0"])
         self.DTpdf["p"] = self.c / (self.c + (1 - self.c) * np.sin(self.DTpdf["a0"])**2)
@@ -38,8 +30,6 @@ class G12(object):
         return self.DTpdf
 
 # Representative angle of a line
-# 
-#
     def angle_stiefel(self, x, y):
         """
         param x,y Stiefel representation of a line in plane, 
@@ -55,7 +45,6 @@ class G12(object):
         #self.alpha[y == 0] = 0
         return self.alpha
 
-# 
 # @param c Relative variance [0,1]
 # @param p Probability of predictive interval, (0, 1),
 #          defaults to 0.683 to mimic one standard deviation (68.3%)
@@ -87,8 +76,7 @@ class G12(object):
 # Sample size: number of observations
         self.l = len(self.theta)
         print("l:", self.l)
-        return self.theta
-        
+        return self.theta    
 
 # Test points excluding training points
     def set_test_points(self):
@@ -127,7 +115,6 @@ class G12(object):
         self.len = (np.amax(self.theta) - np.amin(self.theta)) * 2
         self.lengthscale = [self.len]
         return self.lengthscale
-
 
     def principal(self, i):
         print({
@@ -215,7 +202,6 @@ class G12(object):
         return plt.show()
     
    
-
 if __name__ == "__main__":
     g12 = G12(
         n = 201,
