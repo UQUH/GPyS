@@ -12,7 +12,6 @@ from GPyS_preprocessor import Preprocessor
 from GPyS_prediction import Prediction
 
 
-
 class GPyS_Script:
 	@staticmethod
 	def principal(X, theta, thetanew, lengthscale, thetanew_index=0, t=None):
