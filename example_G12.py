@@ -38,11 +38,7 @@ class G12(object):
         return a vector of angles, [0, pi]
     
         """
-        #stopifnot(all.equal)
-        all
-        #if x**2 + y**2 == 
         self.alpha = np.arccos(x * np.sign(y))
-        #self.alpha[y == 0] = 0
         return self.alpha
 
 # @param c Relative variance [0,1]
@@ -162,7 +158,6 @@ class G12(object):
         print(self.DTpred)
         print(self.DTtrain)
         self.DTpred = np.vstack(((self.DTpred), (self.DTtrain)))
-        print("TYPE", type(self.DTpred))
         self.DTpred_table = pd.DataFrame(self.DTpred, columns=["alpha", "c", "radius", "theta"])
         self.DTpred_table = self.DTpred_table.sort_values(by = ['theta'])
         return self.DTpred_table
@@ -183,19 +178,12 @@ class G12(object):
         fig = plt.figure(figsize=(12,8))
         ax = plt.axes()
         columns = ["alpha", "c", "radius", "theta"]
-        df = pd.read_csv("DTpred-len3.csv", usecols = columns)
-        print("Contents in csv file: \n", df)
-        
         plt.ylim([0.,np.pi])
         ax.plot(self.DTpred_table['theta'], self.DTpred_table['alpha'], color='black')
-        ax.plot(df['theta'], df['alpha'], color='green')
-        
         ax.scatter(self.points['theta'], self.points['alpha'], color = 'black')
         ax.plot(self.DT_curve['theta'], self.DT_curve['alpha'], color = 'blue')
         ax.plot(self.DTpred_table['theta'], self.DTpred_table['alpha'] + self.DTpred_table['radius'], color='red')
         ax.plot(self.DTpred_table['theta'], self.DTpred_table['alpha'] - self.DTpred_table['radius'], color='red')
-        ax.plot(df['theta'], df['alpha'] + df['radius'], color='yellow')
-        ax.plot(df['theta'], df['alpha'] - df['radius'], color='yellow')
         ax.plot()
         ax.set_xlabel('theta')
         ax.set_ylabel('alpha')
@@ -235,15 +223,3 @@ if __name__ == "__main__":
     
     #Test DTpred_plot()
     print("DTpred_plot:\n", g12.DTpred_plot())
-
-
-
-
-
-
-
-
-
-
-
-
