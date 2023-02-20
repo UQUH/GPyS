@@ -3,12 +3,12 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "GPySR"
+name = "GPyS"
 version = "0.0.2"
 authors = [
   { name="Taiwo Adebiyi", email="taadebi2@cougarnet.uh.edu" },
 ]
-description = "Gaussian Process Subspace Regression Prediction, Eigen-Decomposition Version"
+description = "Gaussian Process Subspace Prediction"
 readme = "README.md"
 requires-python = ">=3.6"
 classifiers = [
