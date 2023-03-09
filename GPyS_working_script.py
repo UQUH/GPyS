@@ -5,8 +5,6 @@ Created on Mon Feb 13 21:13:59 2023
 @author: taadebi2
 """
 
-import numpy as np
-from scipy.linalg import subspace_angles, norm
 from json import dumps
 from GPyS_preprocessor import Preprocessor
 from GPyS_prediction import Prediction
@@ -40,7 +38,8 @@ class GPyS_Script:
 		
 		return ret
 
-# see sample input below:(also refer to example_G12 for an iterative use of the principal function) 
+# see sample input below:(also refer to example_G12 for an iterative 
+#                           use of the principal function) 
 
 if __name__ == "__main__":
 	
