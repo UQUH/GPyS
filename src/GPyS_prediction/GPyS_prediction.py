@@ -13,19 +13,19 @@ class Prediction(object):
     @staticmethod
     def predict(X, sample, target, length_scale, t=None):
         """
-        :param X: Concatenated orthonormal bases
-        :param sample: vector of scalar parameters, or matrix of vector parameters
-        :param target: parameter point for prediction
-        :param length_scale: length-scale of correlation, isotropic (scaler)
+        :param X ([[float]]): Concatenated orthonormal bases
+        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
+        :param target ([[float]]): parameter point for prediction
+        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
-        :param t: truncation size (optional)
+        :param t (int): truncation size (optional)
         :returns: GPS Prediction
         """
         Preprocessor.setup(X)
         X = np.array(X)
         sample = np.array(sample)
         target = np.array(target)
-        length_scale = np.array(length_scale)  # get_length_scale()
+        length_scale = np.array(length_scale)  
 
         XtX = Preprocessor.get_XX_cross_product()
         K = Prediction.construct_corr_matrix0(sample, length_scale)
@@ -38,14 +38,13 @@ class Prediction(object):
         eps2 = Prediction.__compute_noise_variance(v, cv)
         CPC = Prediction.__compute_CPC(X, XPX)
         d1_squared, v_circ = Prediction.__compute_EVD(t, CPC)
-        # GPS_Prediction_0 = {"Vcirc": v_circ, "sigma^2": d1_squared, "eps^2": eps2}
         return Prediction.__GPS_Prediction(X, d1_squared, v_circ, eps2)
 
     @staticmethod
     def construct_corr_matrix0(sample, length_scale):
         """
-        :param sample: vector of scalar parameters, or matrix of vector parameters
-        :param length_scale: length-scale of correlation, isotropic (scaler)
+        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
+        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
         :returns: a correlation matrix K
         """
@@ -80,9 +79,9 @@ class Prediction(object):
     @staticmethod
     def get_dimensions(X, sample, length_scale):
         """
-        :param X: Concatenated orthonormal bases
-        :param sample: vector of scalar parameters, or matrix of vector parameters
-        :param length_scale: length-scale of correlation, isotropic (scaler)
+        :param X ([[float]]): Concatenated orthonormal bases
+        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
+        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
         :returns: length of sample points (l) and subspace dimension (k)
         """
@@ -96,7 +95,7 @@ class Prediction(object):
     @staticmethod
     def construct_corr_vector0(sample, target, length_scale):
         """
-        :param sample: vector of scalar parameters, or matrix of vector parameters
+        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
         :param target: New parameter
         :param length_scale: length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
@@ -134,9 +133,9 @@ class Prediction(object):
     @staticmethod
     def compute_v_and_diag_vinv(sample, target, length_scale):
         """
-        :param sample: vector of scalar parameters, or matrix of vector parameters
-        :param target: New parameter
-        :param length_scale: length-scale of correlation, isotropic (scaler)
+        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
+        :param target ([[float]]): New parameter
+        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
         :returns: v and inverse of diag_v
         """
@@ -162,9 +161,9 @@ class Prediction(object):
     @staticmethod
     def compute_khat_and_k_tilda(sample, target, length_scale):
         """
-        :param sample: vector of scalar parameters, or matrix of vector parameters
-        :param target: New parameter
-        :param length_scale: length-scale of correlation, isotropic (scaler)
+        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
+        :param target ([[float]]): New parameter
+        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
         :returns: khat and k_tilda
         """
@@ -196,10 +195,10 @@ class Prediction(object):
     @staticmethod
     def compute_XPX(X, sample, target, length_scale):
         """
-        :param X: Concatenated orthonormal bases
-        :param sample: vector of scalar parameters, or matrix of vector parameters
-        :param target: parameter point for prediction
-        :param length_scale: length-scale of correlation, isotropic (scaler)
+        :param X ([[float]]): Concatenated orthonormal bases
+        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
+        :param target ([[float]]): parameter point for prediction
+        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
         :returns: Block matrix structure
         """
@@ -228,10 +227,10 @@ class Prediction(object):
     @staticmethod
     def XPX_decomposition(X, sample, target, length_scale):
         """
-        :param X: Concatenated orthonormal bases
-        :param sample: vector of scalar parameters, or matrix of vector parameters
-        :param target: parameter point for prediction
-        :param length_scale: length-scale of correlation, isotropic (scaler)
+        :param X ([[float]]): Concatenated orthonormal bases
+        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
+        :param target ([[float]]): parameter point for prediction
+        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
         returns: upper triangular Cholesky factor
         """
@@ -253,9 +252,9 @@ class Prediction(object):
     @staticmethod
     def compute_noise_variance(sample, target, length_scale):
         """
-        :param sample: vector of scalar parameters, or matrix of vector parameters
-        :param target: parameter point for prediction
-        :param length_scale: length-scale of correlation, isotropic (scaler)
+        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
+        :param target ([[float]]): parameter point for prediction
+        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
         :returns: noise variance
         """
@@ -278,10 +277,10 @@ class Prediction(object):
     @staticmethod
     def compute_CPC(X, sample, target, length_scale):
         """
-        :param X: Concatenated orthonormal bases
-        :param sample: vector of scalar parameters, or matrix of vector parameters
-        :param target: parameter point for prediction
-        :param length_scale: length-scale of correlation, isotropic (scaler)
+        :param X ([[float]]): Concatenated orthonormal bases
+        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
+        :param target ([[float]]): parameter point for prediction
+        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
         :returns: matrix cross product of tideL
         """
@@ -307,12 +306,12 @@ class Prediction(object):
     @staticmethod
     def compute_EVD(X, sample, target, length_scale, t=None):
         """
-        :param X: Concatenated orthonormal bases
-        :param sample: vector of scalar parameters, or matrix of vector parameters
-        :param target: parameter point for prediction
-        :param length_scale: length-scale of correlation, isotropic (scaler)
+        :param X ([[float]]): Concatenated orthonormal bases
+        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
+        :param target ([[float]]): parameter point for prediction
+        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
-        :param t: truncation size (optional)
+        :param t (int): truncation size (optional)
         :returns: truncated if t is provided, else returns full EVD
         """
         CPC = Prediction.compute_CPC(X, sample, target, length_scale)
@@ -338,12 +337,12 @@ class Prediction(object):
     @staticmethod
     def GPS_Prediction(X, sample, target, length_scale, t=None):
         """
-        :param X: Concatenated orthonormal bases
-        :param sample: vector of scalar parameters, or matrix of vector parameters
-        :param target: parameter point for prediction
-        :param length_scale: length-scale of correlation, isotropic (scaler)
+        :param X ([[float]]): Concatenated orthonormal bases
+        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
+        :param target ([[float]]): parameter point for prediction
+        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
-        :param t: truncation size (optional)
+        :param t (int): truncation size (optional)
         :returns: principal directions, principal variances, and noise variance
         """
         return Prediction.predict(

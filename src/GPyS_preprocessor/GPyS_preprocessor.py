@@ -12,8 +12,9 @@ class Preprocessor:
     @classmethod
     def setup(cls, X):
         """
-        :param X: Concatenated orthonormal bases
-        :returns: X and X-transposed cross product; SVD of X;
+        :param X ([[float]]): Concatenated orthonormal bases
+        :returns: X and X-transposed cross product; 
+                  SVD of X;
                   Cross product of svdX$D and svdX$Wt, and
                   Transposed Vt_X
         """
