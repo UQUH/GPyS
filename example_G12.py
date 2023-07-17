@@ -9,8 +9,8 @@ import math
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from GPyS_preprocessor import Preprocessor
-from GPyS_prediction import Prediction 
+from src.GPyS_preprocessor import Preprocessor
+from src.GPyS_prediction import Prediction
 import matplotlib.pyplot as plt
 
 
