@@ -50,7 +50,8 @@ if __name__ == "__main__":
     # -------------------------------------------------------------------------
     # Anemometer Case
     # ------------------------------------------------------------------------
-
+    # note that the input data have been pre-computed using the underlying physics 
+    # In this case, the data are directly generated and enumerated from series of CSV files (lines 57 - 68)
     path_to_files = "./GPyS_Anenometer/"
 
     X_train, train_theta = Anemometer.get_X_and_theta(
