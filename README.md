@@ -18,14 +18,14 @@ After installing the package you can load it via:
 #### For GPS Preprocessor: 
   - from GPyS_preprocessor import Preprocessor
   - Note that only Preprocessor.setup(X) takes in argument X and this must be called first before any other functions
-  - The remaining functions merely returns preprocessing quantities of interests
+  - The remaining functions merely return preprocessing quantities of interests
 
 #### For GPS Hyperparameter training:
 - from GPyS_LOOCV_error import LOOCV
 - Utilize hSSDist(length) method for the objective function computation at a given (default) length scale
-- Refer to the GPyS_working_script.py to see an example computation of optimal lengthscale for GPS. 
+- Please take a look at the LOOCV_script.py to see an example computation of optimal lengthscale for GPS. 
 
 #### For GPS Prediction: 
   - from GPyS_prediction import Prediction
   - All the functions can be independently called here. 
-  - Also, user can directly call Prediction.GPS_Prediction() to immediately obtain prediction results
+  - Also, the user can directly call Prediction.GPS_Prediction() to immediately obtain prediction results

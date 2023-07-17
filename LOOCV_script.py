@@ -7,12 +7,11 @@ from scipy.optimize import minimize
 def optimal_length_scale(X,
                          sample, length=None, d=1):
     """
-    Compute optimal lengthscale by minimizing objective / cost function
+    Compute optimal lengthscale by minimizing objective/cost function
     :param X: Concatenated orthonormal bases ([[float]])
     :param sample: vector of scalar parameters, or matrix of vector parameters ([[float]])
-    :param length : length-scale of correlation, isotropic (scaler)
-                                        or separable (vector) - (int)
-    :param d: parameter dimension to compute default length scale
+    :param length : default length-scale  - (int)
+    :param d: parameter dimension to computing default length scale (optional as the user can precompute length)
     :returns: optimal lengthscale
     """
     if length == None:
