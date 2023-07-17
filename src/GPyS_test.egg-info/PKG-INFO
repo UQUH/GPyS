@@ -1,3 +1,15 @@
+Metadata-Version: 2.1
+Name: GPyS-test
+Version: 0.0.3
+Summary: Gaussian Process Subspace Prediction
+Author-email: Taiwo Adebiyi <taadebi2@cougarnet.uh.edu>
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
 This is a prototypical implementation of GPS in the Python programming language. 
 For the original research article documenting the method, see the Citation section.
 
@@ -23,7 +35,7 @@ After installing the package you can load it via:
 #### For GPS Hyperparameter training:
 - from GPyS_LOOCV_error import LOOCV
 - Utilize hSSDist(length) method for the objective function computation at a given (default) length scale
-- Refer to the GPyS_working_script.py to see an example computation of optimal lengthscale for GPS. 
+- Refer to the working script to see an example computation of optimal lengthscale for GPS. 
 
 #### For GPS Prediction: 
   - from GPyS_prediction import Prediction

@@ -1,9 +1,8 @@
 import pandas as pd
 
-from src.GPyS_preprocessor import Preprocessor
-from src.GPyS_prediction import Prediction as Pred
+from GPyS_preprocessor import Preprocessor
+from GPyS_prediction import Prediction as Pred
 
-from GPyS_anemometer import Anemometer
 
 import numpy as np
 import scipy
@@ -217,51 +216,41 @@ class LOOCV():
 
 # Testing the functions:
 if __name__ == "__main__":
-    path_to_files = "./GPyS_Anenometer/"
 
-    X_train, train_theta = Anemometer.get_X_and_theta(
-        path_to_files=path_to_files,
-        file_filter="train",
-        no_of_files_to_work_with=-1,
-        filter_file_from_position_start=None,  # None => start from file 0
-        filter_file_from_position_end=None,  # None => goes all the way to the end of file
-        no_of_rows_in_files_to_work_with=-1,
-        merge_all_x=True,
-        )
     sample = [[0.00], [0.17], [0.33], [0.50],
               [0.67], [0.83], [1.00]]
     beta = [0.3809524]
-    X = X_train
+    X = [[0.809017, 0.1045284, -0.6691306, -1.0, -0.6691306, 0.1045284, 0.809017],
+                        [0.5877852, 0.9945219, 0.7431448, -0.0, -0.7431448, -0.9945219, -0.5877852]]
+
     LOO = LOOCV(X, sample=sample, beta=beta)
 
     #Test get_K_and_K_inv()
     K, K_inv = LOO.get_K_and_K_inv()
-    print("K: \n", K)
-    print("K_inv: \n", K_inv)
 
-    # Test default_length ()
-    #LOO.default_length(1, len(sample))
+    #Test default_length ()
+    LOO.default_length(1, len(sample))
 
-    # # Test get_Preprocessor()
-    # LOO.get_Preprocessor(X)
-    #
-    # # Test get_dimensions()
-    # LOO.get_dimensions()
-    #
-    # # Test get_ones()
-    # LOO.get_ones()
-    #
-    # # Test LOODistSvd()
-    # #LOO.LOODistSvd(0)
-    #
-    # Test LOOPredEvd
-    #LOO.LOOPredEvd(0)
-    #
-    # Test LOODistEVD()
-    # LOO.LOODistEVD(0)
+    # Test get_Preprocessor()
+    LOO.get_Preprocessor()
+
+    # Test get_dimensions()
+    LOO.get_dimensions()
+
+    # Test get_ones()
+    LOO.get_ones()
+
+    # Test LOODistSvd()
+    LOO.LOODistSvd(0)
+
+    #Test LOOPredEvd
+    LOO.LOOPredEvd(0)
+
+    #Test LOODistEVD()
+    LOO.LOODistEVD(0)
 
     # Test hSSDist()
-    print("hSSDist", LOO.hSSDist(0.3809524))
+    print("hSSDist", LOO.hSSDist(3))
 
 
 
