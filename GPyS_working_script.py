@@ -6,8 +6,8 @@ Created on Mon Feb 13 21:13:59 2023
 """
 
 from json import dumps
-from src.GPyS_preprocessor import Preprocessor
-from src.GPyS_prediction import Prediction
+from GPyS_preprocessor import Preprocessor
+from GPyS_prediction import Prediction
 
 
 class GPyS_Script:

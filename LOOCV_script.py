@@ -1,5 +1,4 @@
 from GPyS_LOOCV_error import LOOCV
-from GPyS_anemometer import Anemometer
 
 from scipy.optimize import minimize
 
@@ -47,24 +46,3 @@ if __name__ == "__main__":
     # call optimal_length_scale function
     print("example_G12_optimal_length_scale: ", optimal_length_scale(X_example_G12, sample_example_G12, 10.0530966))
 
-    # -------------------------------------------------------------------------
-    # Anemometer Case
-    # ------------------------------------------------------------------------
-    # note that the input data have been pre-computed using the underlying physics 
-    # In this case, the data are directly generated and enumerated from series of CSV files (lines 57 - 68)
-    path_to_files = "./GPyS_Anenometer/"
-
-    X_train, train_theta = Anemometer.get_X_and_theta(
-        path_to_files=path_to_files,
-        file_filter="train",
-        no_of_files_to_work_with=-1,
-        filter_file_from_position_start=None,  # None => start from file 0
-        filter_file_from_position_end=None,  # None => goes all the way to the end of file
-        no_of_rows_in_files_to_work_with=-1,
-        merge_all_x=True,
-        )
-    sample_anemometer = [[0.00], [0.17], [0.33], [0.50],
-              [0.67], [0.83], [1.00]]
-    X_anemometer = X_train
-    # call optimal_length_scale function
-    print("anemometer_optimal_length_scale: ", optimal_length_scale(X_anemometer, sample_anemometer))
