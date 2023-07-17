@@ -2,7 +2,7 @@ import numpy as np
 import scipy
 import scipy.linalg as la
 
-from GPyS_preprocessor import Preprocessor
+from src.GPyS_preprocessor import Preprocessor
 
 
 class Prediction(object):
