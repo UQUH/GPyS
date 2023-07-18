@@ -6,37 +6,38 @@ Created on Mon Feb 13 21:13:59 2023
 """
 
 from json import dumps
-from GPyS_preprocessor import Preprocessor
 from GPyS_prediction import Prediction
 
 
-class GPyS_Script:
-	@staticmethod
-	def principal(X, theta, thetanew, lengthscale, thetanew_index=0, t=None):
-		print(
-			dumps(
-				{
-					"X": X, 
-					"i": thetanew_index, 
-					"thetanew": thetanew,
-					"thetanew[i]": thetanew[thetanew_index],
-					"theta": theta,
-					"lengthscale": lengthscale,
-				}, indent=4, ensure_ascii=False, default=str),
-			end="\n\n"
-		)
-		
-		print("target_point:", thetanew[thetanew_index], end="\n\n")
 
-		ret = Prediction.GPS_Prediction(
-			X=X,
-			sample=theta,
-			target=[thetanew[thetanew_index]],
-			length_scale=lengthscale,
-			t=t
-		)
+def principal(X, theta, thetanew, lengthscale, thetanew_index=0, t=None):
+	# ------------------------------------------------------------------------------------------------
+	# please do not print for large matrices (i.e., comment line 18 to 31 of GPyS_prediction_script.py)
+	# -------------------------------------------------------------------------------------------------
+	print(
+		dumps(
+			{
+				"X": X,
+				"i": thetanew_index,
+				"thetanew": thetanew,
+				"thetanew[i]": thetanew[thetanew_index],
+				"theta": theta,
+				"lengthscale": lengthscale,
+			}, indent=4, ensure_ascii=False, default=str),
+		end="\n\n"
+	)
+
+	print("target_point:", thetanew[thetanew_index], end="\n\n")
+
+	ret = Prediction.GPS_Prediction(
+		X=X,
+		sample=theta,
+		target=[thetanew[thetanew_index]],
+		length_scale=lengthscale,
+		t=t
+	)
 		
-		return ret
+	return ret
 
 # see sample input below:(also refer to example_G12 for an iterative 
 #                           use of the principal function) 
@@ -53,7 +54,7 @@ if __name__ == "__main__":
     target = [[6.157522]]
     length_scale = [3]
     
-    V_circ, sigma2, eps2  = GPyS_Script.principal(
+    V_circ, sigma2, eps2  = principal(
                                         X, 
                                         sample, 
                                         target, 
