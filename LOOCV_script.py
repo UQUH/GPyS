@@ -1,21 +1,25 @@
 from GPyS_LOOCV_error import LOOCV
 
 from scipy.optimize import minimize
+import numpy as np
 
 
 
 def optimal_length_scale(X,
-                         sample, length=None, d=1):
+                         sample, length=None, scale=1, d=1, ):
     """
     Compute optimal lengthscale by minimizing objective/cost function
     :param X: Concatenated orthonormal bases ([[float]])
     :param sample: vector of scalar parameters, or matrix of vector parameters ([[float]])
-    :param length : default length-scale  - (int)
+    :param scale: scale unit box representation of length scale by actual parameter range (float)
+    :param length : default length-scale  - (float)
     :param d: parameter dimension to computing default length scale (optional as the user can precompute length)
     :returns: optimal lengthscale
     """
     if length == None:
-        length = LOOCV.default_length(d, l=len(sample))
+        length = LOOCV.default_length(d, l=len(sample)) # unit box representation (to be scaled by parameter range)
+    length = length * scale
+    print("scaled_lengthscale: ", length)
     LOO = LOOCV(X, sample=sample, beta=[length])
     # compute bounds for objective function optimization (discretion of user)
     lenUpper = length * 2
@@ -43,5 +47,6 @@ if __name__ == "__main__":
               [3.979351], [4.817109], [5.654867]]
 
     # call optimal_length_scale function
-    print("example_G12_optimal_length_scale: ", optimal_length_scale(X_example_G12, sample_example_G12, 10.0530966))
+    print("example_G12_optimal_length_scale: ", optimal_length_scale(X_example_G12, sample_example_G12,
+                                                                     length=0.42857142857142855, scale= 2 * np.pi))
 
