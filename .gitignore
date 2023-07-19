@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-.idea/
-=======
 # IDE project files: IntelliJ IDEA.
 .idea/
 # Python 3 compiled bytecode.
 __pycache__/
->>>>>>> 1267b5d873439a207fc80114fd4162909a39d831
