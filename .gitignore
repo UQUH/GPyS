@@ -1,1 +1,4 @@
+# IDE project files: IntelliJ IDEA.
 .idea/
+# Python 3 compiled bytecode.
+__pycache__/
