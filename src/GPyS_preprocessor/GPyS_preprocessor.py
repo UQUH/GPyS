@@ -17,7 +17,7 @@ class Preprocessor:
      -- whose results are callable for further computations.
 
      In otherwords, Preprocessor.setup(X) is the core and only computational function within the code.
-     AS such the remaining functions are getter functions within the Preprocessor class.
+     As such the remaining functions are getter functions within the Preprocessor class.
 
     """
     X = None

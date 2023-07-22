@@ -78,7 +78,7 @@ class LOOCV():
         :param l: sample size
         returns: isotropic lengthscale for the unit box [0, 1]^d.
         """
-        return 8/3 * np.sqrt(d) * d/l
+        return (3 * d**(3/2)) / l
 
     def get_Preprocessor(self) -> np.ndarray:
         """
@@ -222,7 +222,7 @@ if __name__ == "__main__":
     K, K_inv = LOO.get_K_and_K_inv()
 
     #Test default_length ()
-    LOO.default_length(1, len(sample))
+    print(LOO.default_length(1, len(sample)))
 
     # Test get_Preprocessor()
     LOO.get_Preprocessor()
@@ -240,7 +240,7 @@ if __name__ == "__main__":
     LOO.LOODistEVD(0)
 
     # Test hSSDist()
-    print("hSSDist", LOO.hSSDist(3))
+    print("hSSDist", LOO.hSSDist(1.44213061))
 
 
 

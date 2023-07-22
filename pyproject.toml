@@ -4,8 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "GPyS"
-version = "0.0.3"
+version = "0.0.31"
 authors = [
+  { name="ZHANG, Ruda", email="rudaz@Central.UH.EDU" },
   { name="Taiwo Adebiyi", email="taadebi2@cougarnet.uh.edu" },
 ]
 description = "Gaussian Process Subspace Prediction"
@@ -17,7 +18,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
-#[project.urls]
-#"Homepage" = "-----------"
+[project.urls]
+Homepage = "https://github.com/UQUH/GPyS"
 #"Bug Tracker" = "-------"
 
