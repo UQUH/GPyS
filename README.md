@@ -9,7 +9,7 @@ For the original research article documenting the method, see the Citation secti
 
 Install the package via pip using the following command:
 
-- pip install GPyS==0.0.3
+- pip install GPyS==0.0.31
 
 ## Example Use 
 
