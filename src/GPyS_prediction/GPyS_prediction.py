@@ -1,25 +1,53 @@
+import numpy
 import numpy as np
 import scipy
 import scipy.linalg as la
 
 from GPyS_preprocessor import Preprocessor
+from typing import TypeAlias, Union, Optional
 
+
+vector: TypeAlias = list[float]
+matrix: TypeAlias = list[vector]
 
 class Prediction(object):
     """"
-  GP Subspace Regression Prediction, Eigen-Decomposition Version
+    ===============================================================
+    GP Subspace Regression Prediction, Eigen-Decomposition Version
+    ==============================================================
+    Prediction module of the GPyS primarily computes the predictive distributions from a given set observations,
+    target point, and established basis which have been preprocessed by the Preprocessor module of the GPyS package.
+
+    The core method of the Prediction module is Prediction.GPS_prediction() function. By calling this method, the
+    predictions which comprise principal directions, principal variances, and noise variance
+    can be immediately evaluated.
+
+    Alternatively, Prediction.predict() can also be used to achieve the same (no explicit difference between these two
+    prediction methods -- the options are available for internal package development reasons).
+
+    Several functions leading to the computation of the predictive distributions are also publicly available for
+    user-specific computations. Notable mentions include correlation matrix and vector, noise variance among other
+    computations.
+
+    Refer to the git-hub page <https://github.com/UQUH/GPyS> to see example scripts that utilized these functions
     """
 
     @staticmethod
-    def predict(X, sample, target, length_scale, t=None):
+    def predict(X: matrix, sample: matrix, target: matrix,
+                length_scale: Union[int, float], t: Optional[int] = None) -> list[np.ndarray, np.ndarray, float]:
         """
-        :param X ([[float]]): Concatenated orthonormal bases
-        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
-        :param target ([[float]]): parameter point for prediction
-        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
+        Gaussian process subspace regression prediction, eigen-decomposition version
+        :param X: Concatenated orthonormal bases (matrix of size n by kl)*
+        :param sample: vector of scalar parameters, or matrix of vector parameters
+        (both cases utilize same data structure in Python)
+        :param target: parameter point for prediction
+        :param length_scale: length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
-        :param t (int): truncation size (optional)
-        :returns: GPS Prediction
+        :param t: truncation size (optional)
+        :returns: GPS prediction which includes principal directions, principal variances, and noise variance
+
+        * n: ambient dimension of the Euclidean space; k: subspace dimension; l: sample size
+
         """
         Preprocessor.setup(X)
         X = np.array(X)
@@ -36,17 +64,18 @@ class Prediction(object):
         khat, k_tilda = Prediction.__compute_khat_and_k_tilda(K, diag_v)
         XPX = Prediction.__compute_XPX(l, k, k_tilda, XtX)
         eps2 = Prediction.__compute_noise_variance(v, cv)
-        CPC = Prediction.__compute_CPC(X, XPX)
+        CPC = Prediction.__compute_CPC(XPX)
         d1_squared, v_circ = Prediction.__compute_EVD(t, CPC)
         return Prediction.__GPS_Prediction(X, d1_squared, v_circ, eps2)
 
     @staticmethod
-    def construct_corr_matrix0(sample, length_scale):
+    def construct_corr_matrix0(sample: matrix, length_scale: Union[int, float]) -> np.ndarray:
         """
-        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
-        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
+        Squared exponential kernel, matrix version
+        :param sample: vector of scalar parameters, or matrix of vector parameters
+        :param length_scale: length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
-        :returns: a correlation matrix K
+        :returns: a correlation matrix K (positive-semi-definite matrix)
         """
         sample = np.array(sample)
         length_scale = np.array(length_scale)
@@ -66,8 +95,9 @@ class Prediction(object):
         return np.exp(-(dist ** 2) / 2)
 
     @staticmethod
-    def __get_dimensions(K, XtX):
+    def __get_dimensions(K: np.ndarray, XtX: np.ndarray) -> int:
         """
+        computes sample size and subspace dimension.
         :param K: correlation matrix
         :param XtX: X and X-transposed cross product
         :returns: length of sample points (l) and subspace dimension (k)
@@ -77,13 +107,16 @@ class Prediction(object):
         return l, k
 
     @staticmethod
-    def get_dimensions(X, sample, length_scale):
+    def get_dimensions(X: matrix, sample: matrix, length_scale: Union[int, float]) -> int:
         """
-        :param X ([[float]]): Concatenated orthonormal bases
-        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
-        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
+        computes sample size and subspace dimension.
+        :param X: Concatenated orthonormal bases (matrix of size n by kl)*
+        :param sample: vector of scalar parameters, or matrix of vector parameters
+        :param length_scale: length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
         :returns: length of sample points (l) and subspace dimension (k)
+
+        * n: ambient dimension of the Euclidean space; k: subspace dimension; l: sample size
         """
         Preprocessor.setup(X)
         XtX = Preprocessor.get_XX_cross_product()
@@ -93,10 +126,11 @@ class Prediction(object):
         return l, k
 
     @staticmethod
-    def construct_corr_vector0(sample, target, length_scale):
+    def construct_corr_vector0(sample: matrix, target: matrix, length_scale: Union[int, float]) -> np.ndarray:
         """
-        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
-        :param target: New parameter
+        computes covariance vector for given sample of parameters and a target parameter
+        :param sample: vector of scalar parameters, or matrix of vector parameters
+        :param target: new parameter
         :param length_scale: length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
         :returns: a covariance vector cv
@@ -120,8 +154,9 @@ class Prediction(object):
         return cv
 
     @staticmethod
-    def __compute_v_and_diag_vinv(K, cv):
+    def __compute_v_and_diag_vinv(K: np.ndarray, cv: np.ndarray) -> np.ndarray:
         """
+        computes weight vector and diagonal of weight vector
        :param K: correlation matrix
        :param cv: covariance vector
        :returns: v and inverse of diag_v
@@ -131,11 +166,11 @@ class Prediction(object):
         return v, diag_v
 
     @staticmethod
-    def compute_v_and_diag_vinv(sample, target, length_scale):
+    def compute_v_and_diag_vinv(sample: matrix, target: matrix, length_scale: Union[int, float]) -> np.ndarray:
         """
-        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
-        :param target ([[float]]): New parameter
-        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
+        :param sample: vector of scalar parameters, or matrix of vector parameters
+        :param target: new parameter
+        :param length_scale: length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
         :returns: v and inverse of diag_v
         """
@@ -146,7 +181,7 @@ class Prediction(object):
         return v, diag_v
 
     @staticmethod
-    def __compute_khat_and_k_tilda(K, diag_v):
+    def __compute_khat_and_k_tilda(K: np.ndarray, diag_v: np.ndarray) -> np.ndarray:
         """
         :param K: correlation matrix
         :param diag_v: inverse of diag_v
@@ -159,11 +194,11 @@ class Prediction(object):
         return khat, k_tilda
 
     @staticmethod
-    def compute_khat_and_k_tilda(sample, target, length_scale):
+    def compute_khat_and_k_tilda(sample: matrix, target: matrix, length_scale: Union[int, float]) -> np.ndarray:
         """
-        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
-        :param target ([[float]]): New parameter
-        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
+        :param sample : vector of scalar parameters, or matrix of vector parameters
+        :param target : New parameter
+        :param length_scale: length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
         :returns: khat and k_tilda
         """
@@ -177,7 +212,7 @@ class Prediction(object):
         return khat, k_tilda
 
     @staticmethod
-    def __compute_XPX(l, k, k_tilda, XtX):
+    def __compute_XPX(l: int, k: int, k_tilda: np.ndarray, XtX: np.ndarray) -> np.ndarray:
         """
         :param K: correlation matrix
         :param k: subspace dimension
@@ -193,14 +228,16 @@ class Prediction(object):
         return XPX
 
     @staticmethod
-    def compute_XPX(X, sample, target, length_scale):
+    def compute_XPX(X: matrix, sample: matrix, target: matrix, length_scale: Union[int, float]) -> np.ndarray:
         """
-        :param X ([[float]]): Concatenated orthonormal bases
-        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
-        :param target ([[float]]): parameter point for prediction
-        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
+        :param X : Concatenated orthonormal bases (matrix of size n by kl)*
+        :param sample : vector of scalar parameters, or matrix of vector parameters
+        :param target : parameter point for prediction
+        :param length_scale: length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
         :returns: Block matrix structure
+
+        * n: ambient dimension of the Euclidean space; k: subspace dimension; l: sample size
         """
         Preprocessor.setup(X)
         XtX = Preprocessor.get_XX_cross_product()
@@ -215,7 +252,7 @@ class Prediction(object):
         return XPX
 
     @staticmethod
-    def __XPX_decomposition(XPX):
+    def __XPX_decomposition(XPX: np.ndarray) -> np.ndarray:
         """"
         computes cholesky factor
         returns: upper triangular
@@ -225,11 +262,11 @@ class Prediction(object):
         return U
 
     @staticmethod
-    def XPX_decomposition(X, sample, target, length_scale):
+    def XPX_decomposition(X: matrix, sample: matrix, target: matrix, length_scale: Union[int, float]) -> np.ndarray:
         """
-        :param X ([[float]]): Concatenated orthonormal bases
-        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
-        :param target ([[float]]): parameter point for prediction
+        :param X : Concatenated orthonormal bases (matrix of size n by kl)*
+        :param sample : vector of scalar parameters, or matrix of vector parameters
+        :param target : parameter point for prediction
         :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
         returns: upper triangular Cholesky factor
@@ -240,7 +277,7 @@ class Prediction(object):
         return U
 
     @staticmethod
-    def __compute_noise_variance(v, cv):
+    def __compute_noise_variance(v: np.ndarray, cv: np.ndarray) -> float:
         """
         :param v: linear solve of K and diag_v
         :param cv: covariance vector
@@ -250,10 +287,10 @@ class Prediction(object):
         return eps2
 
     @staticmethod
-    def compute_noise_variance(sample, target, length_scale):
+    def compute_noise_variance(sample: matrix, target: matrix, length_scale: Union[int, float]) -> float:
         """
-        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
-        :param target ([[float]]): parameter point for prediction
+        :param sample : vector of scalar parameters, or matrix of vector parameters
+        :param target : parameter point for prediction
         :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
         :returns: noise variance
@@ -264,25 +301,29 @@ class Prediction(object):
         return eps2
 
     @staticmethod
-    def __compute_CPC(X, XPX):
+    def __compute_CPC(XPX: np.ndarray) -> np.ndarray:
         """
-        :param X: Concatenated orthonormal bases
+        :param X: Concatenated orthonormal bases (matrix of size n by kl)*
         :param XPX: constructed block matrix
         :returns: matrix cross product of tideL
+
+        * n: ambient dimension of the Euclidean space; k: subspace dimension; l: sample size
         """
         PC = la.solve(XPX, Preprocessor.get_Xt_V())
         CPC = Preprocessor.get_Vt_X() @ PC
         return CPC
 
     @staticmethod
-    def compute_CPC(X, sample, target, length_scale):
+    def compute_CPC(X: matrix, sample: matrix, target: matrix, length_scale: Union[int, float]):
         """
-        :param X ([[float]]): Concatenated orthonormal bases
-        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
-        :param target ([[float]]): parameter point for prediction
+        :param X : Concatenated orthonormal bases (matrix of size n by kl)*
+        :param sample : vector of scalar parameters, or matrix of vector parameters
+        :param target : parameter point for prediction
         :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
         :returns: matrix cross product of tideL
+
+        * n: ambient dimension of the Euclidean space; k: subspace dimension; l: sample size
         """
         Preprocessor.setup(X)
         XPX = Prediction.compute_XPX(X, sample, target, length_scale)
@@ -291,7 +332,7 @@ class Prediction(object):
         return CPC
 
     @staticmethod
-    def __compute_EVD(t, CPC):
+    def __compute_EVD(t: int, CPC: np.ndarray) -> list[np.ndarray, np.ndarray]:
         """
         :param t: truncation size (optional)
         :param CPC: constructed block matrix
@@ -304,15 +345,18 @@ class Prediction(object):
         return d1_squared, v_circ
 
     @staticmethod
-    def compute_EVD(X, sample, target, length_scale, t=None):
+    def compute_EVD(X: matrix, sample: matrix, target: matrix, length_scale: Union[int, float],
+                    t: Optional[int] = None) -> list[np.ndarray, np.ndarray]:
         """
-        :param X ([[float]]): Concatenated orthonormal bases
-        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
-        :param target ([[float]]): parameter point for prediction
+        :param X : Concatenated orthonormal bases (matrix of size n by kl)*
+        :param sample : vector of scalar parameters, or matrix of vector parameters
+        :param target : parameter point for prediction
         :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
         :param t (int): truncation size (optional)
         :returns: truncated if t is provided, else returns full EVD
+
+        * n: ambient dimension of the Euclidean space; k: subspace dimension; l: sample size
         """
         CPC = Prediction.compute_CPC(X, sample, target, length_scale)
         if t != None:
@@ -322,28 +366,34 @@ class Prediction(object):
         return d1_squared, v_circ
 
     @staticmethod
-    def __GPS_Prediction(X, d1_squared, v_circ, eps2):
+    def __GPS_Prediction(X: matrix, d1_squared: np.ndarray, v_circ: np.ndarray,
+                         eps2: float) -> list[np.ndarray, np.ndarray, float]:
         """
-        :param X: Concatenated orthonormal bases
+        :param X: Concatenated orthonormal bases (matrix of size n by kl)*
         :param d1_squared: EVD values
         :param v_circ: EVD vectors
         :param eps2: noise variance
         :returns: principal directions, principal variances, and noise variance
+
+        * n: ambient dimension of the Euclidean space; k: subspace dimension; l: sample size
         """
         v = Preprocessor.get_V_D_Wt()[0]
         GPS_Prediction = [v @ v_circ, d1_squared, eps2]
         return GPS_Prediction
 
     @staticmethod
-    def GPS_Prediction(X, sample, target, length_scale, t=None):
+    def GPS_Prediction(X: matrix, sample: matrix, target: matrix, length_scale:Union[int, float],
+                       t: Optional[int] = None) -> list[np.ndarray, np.ndarray, float]:
         """
-        :param X ([[float]]): Concatenated orthonormal bases
-        :param sample ([[float]]): vector of scalar parameters, or matrix of vector parameters
-        :param target ([[float]]): parameter point for prediction
-        :param length_scale ([float]): length-scale of correlation, isotropic (scaler)
+        :param X : Concatenated orthonormal bases (matrix of size n by kl)*
+        :param sample : vector of scalar parameters, or matrix of vector parameters
+        :param target : parameter point for prediction
+        :param length_scale: length-scale of correlation, isotropic (scaler)
                              or separable (vector), defaults to 1
-        :param t (int): truncation size (optional)
+        :param t: truncation size (optional)
         :returns: principal directions, principal variances, and noise variance
+
+        * n: ambient dimension of the Euclidean space; k: subspace dimension; l: sample size
         """
         return Prediction.predict(
             X=X,
