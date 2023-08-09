@@ -1,4 +1,4 @@
-from GPyS_LOOCV_error import LOOCV
+from GPyS import GPyS_LOOCV_error
 
 from scipy.optimize import minimize
 import numpy as np
@@ -6,7 +6,7 @@ import numpy as np
 
 
 def optimal_length_scale(X,
-                         sample, length=None, scale=1, d=1, ):
+                         sample, length=None, scale=1, d=1,):
     """
     Compute optimal lengthscale by minimizing objective/cost function
     :param X: Concatenated orthonormal bases ([[float]])
@@ -17,10 +17,10 @@ def optimal_length_scale(X,
     :returns: optimal lengthscale
     """
     if length == None:
-        length = LOOCV.default_length(d, l=len(sample)) # unit box representation (to be scaled by parameter range)
+        length = GPyS_LOOCV_error.LOOCV.default_length(d, l=len(sample)) # unit box representation (to be scaled by parameter range)
     length = length * scale
     print("scaled_lengthscale: ", length)
-    LOO = LOOCV(X, sample=sample, beta=[length])
+    LOO = GPyS_LOOCV_error.LOOCV(X, sample=sample, beta=[length])
     # compute bounds for objective function optimization (discretion of user)
     lenUpper = length * 2
     lenLower = length * 0.5

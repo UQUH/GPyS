@@ -8,9 +8,7 @@ Created on Thu Dec  8 17:33:08 2022
 import math
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from src.GPyS_preprocessor import Preprocessor
-from GPyS_prediction import Prediction
+from GPyS import GPyS_prediction
 import matplotlib.pyplot as plt
 
 
@@ -120,7 +118,7 @@ class G12(object):
             "lengthscale": self.lengthscale,
             "X": self.X
             })
-        self.ret = Prediction.GPS_Prediction(self.X, self.theta, [[self.thetanew[i]]], [3], t=None)
+        self.ret = GPyS_prediction.Prediction.GPS_Prediction(self.X, self.theta, [[self.thetanew[i]]], [3], t=None)
         print("Self.ret: \n", self.ret)
         v_list = self.ret[0]
         v = [item[1] for item in v_list]

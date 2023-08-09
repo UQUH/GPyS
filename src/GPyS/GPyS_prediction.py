@@ -3,7 +3,7 @@ import numpy as np
 import scipy
 import scipy.linalg as la
 
-from GPyS_preprocessor import Preprocessor
+from GPyS.GPyS_preprocessor import Preprocessor
 from typing import TypeAlias, Union, Optional
 
 

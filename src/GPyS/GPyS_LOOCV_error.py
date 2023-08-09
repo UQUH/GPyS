@@ -1,7 +1,7 @@
 import pandas as pd
 
-from GPyS_preprocessor import Preprocessor
-from GPyS_prediction import Prediction as Pred
+from GPyS.GPyS_preprocessor import Preprocessor
+from GPyS.GPyS_prediction import Prediction as Pred
 
 
 import numpy as np

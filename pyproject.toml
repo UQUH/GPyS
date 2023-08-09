@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "GPyS"
-version = "0.0.31"
+version = "0.1.2"
 authors = [
   { name="ZHANG, Ruda", email="rudaz@Central.UH.EDU" },
   { name="Taiwo Adebiyi", email="taadebi2@cougarnet.uh.edu" },
 ]
 description = "Gaussian Process Subspace Prediction"
 readme = "README.md"
-requires-python = ">=3.6"
+requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",

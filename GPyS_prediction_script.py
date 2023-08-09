@@ -6,7 +6,7 @@ Created on Mon Feb 13 21:13:59 2023
 """
 
 from json import dumps
-from GPyS_prediction import Prediction
+from GPyS import GPyS_prediction
 
 
 
@@ -29,7 +29,7 @@ def principal(X, theta, thetanew, lengthscale, thetanew_index=0, t=None):
 
 	print("target_point:", thetanew[thetanew_index], end="\n\n")
 
-	ret = Prediction.GPS_Prediction(
+	ret = GPyS_prediction.Prediction.GPS_Prediction(
 		X=X,
 		sample=theta,
 		target=[thetanew[thetanew_index]],
@@ -61,5 +61,3 @@ if __name__ == "__main__":
                                         length_scale, 
                                         thetanew_index=0)
     print("Vcirc:\n", V_circ, "sigma2:\n,", sigma2, "eps2:\n", eps2)
-	
-	
