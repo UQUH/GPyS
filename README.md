@@ -33,7 +33,7 @@ from GPyS import GPyS_preprocessor, GPyS_prediction, GPyS_LOOCV_error
 #### For GPS Hyperparameter Training:
   - Utilize ```GPyS_LOOCV_error.LOOCV.hSSDist(length)``` method for the objective function computation at a given (default) length scale
   - Please take a look at the LOOCV_script.py to see an example computation of optimal lengthscale for GPS. 
-  - - Also, all the functions can be independently called here. 
+  - Also, all the functions can be independently called here. 
 
 #### For GPS Prediction:
   - Call ```GPyS_prediction.Prediction.GPS_Prediction()``` to immediately obtain prediction results
